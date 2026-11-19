@@ -1,0 +1,12 @@
+services:
+  chaintrace:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Point at your own Esplora / mempool.space instance for privacy or higher rate limits
+      CHAINTRACE_ESPLORA_URL: ${CHAINTRACE_ESPLORA_URL:-https://blockstream.info/api}
+    volumes:
+      - chaintrace-cache:/cache
+volumes:
+  chaintrace-cache:

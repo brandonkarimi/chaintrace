@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChainTrace</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="5" cy="12" r="3"/><circle cx="19" cy="5" r="3"/><circle cx="19" cy="19" r="3"/><path d="M8 11 16 6M8 13l8 5" fill="none" stroke-width="2"/></svg>
+      <span>ChainTrace</span>
+    </div>
+    <form id="trace-form" class="controls" autocomplete="off">
+      <input id="seed" type="text" placeholder="Transaction ID or Bitcoin address" spellcheck="false" required>
+      <label>Direction
+        <select id="direction">
+          <option value="forward">Forward (where it went)</option>
+          <option value="backward">Backward (where it came from)</option>
+          <option value="both">Both</option>
+        </select>
+      </label>
+      <label>Hops <input id="hops" type="number" min="1" max="6" value="3"></label>
+      <label>Max txs <input id="maxtxs" type="number" min="10" max="500" value="150"></label>
+      <button id="trace-btn" type="submit" class="primary">Trace</button>
+      <button id="report-btn" type="button" disabled>Export report</button>
+    </form>
+  </header>
+
+  <main class="layout">
+    <section class="graph-wrap">
+      <div id="cy"></div>
+      <div id="empty" class="empty">
+        <h1>Follow the money on Bitcoin</h1>
+        <p>Paste a transaction ID or address to build its fund-flow graph. ChainTrace clusters addresses,
+          detects change outputs, peel chains and CoinJoins, and scores every address for risk, including exposure to
+          OFAC-sanctioned wallets.</p>
+        <button type="button" class="link" id="demo-btn">Try a demo: the 10,000 BTC pizza transaction</button>
+      </div>
+      <div id="loading" class="loading" hidden><div class="spinner"></div><span>Tracing on-chain…</span></div>
+      <div class="legend" id="legend" hidden>
+        <span><i class="dot low"></i>Low</span><span><i class="dot medium"></i>Medium</span>
+        <span><i class="dot high"></i>High</span><span><i class="dot severe"></i>Severe</span>
+        <span><i class="sq"></i>Transaction</span><span><i class="sq cj"></i>CoinJoin</span>
+        <span><i class="ln"></i>Change</span>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div id="error" class="error" hidden></div>
+      <section class="card" id="details-card" hidden>
+        <h2 id="details-title">Details</h2>
+        <div id="details"></div>
+      </section>
+      <section class="card" id="summary-card" hidden>
+        <h2>Findings</h2>
+        <div class="stats" id="stats"></div>
+        <ul id="findings" class="findings"></ul>
+        <ul id="warnings" class="warnings"></ul>
+      </section>
+      <section class="card" id="risk-card" hidden>
+        <h2>Highest-risk addresses</h2>
+        <ol id="risk-list" class="risk-list"></ol>
+      </section>
+      <p class="disclaimer">Heuristic results are investigative leads, not proof of identity. Public blockchain data only.</p>
+    </aside>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
