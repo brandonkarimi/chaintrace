@@ -87,8 +87,8 @@ class EsploraClient:
         base_url: str | None = None,
         cache_path: str | Path | None = None,
         timeout: float = 20.0,
-        min_interval: float = 0.12,
-        max_retries: int = 4,
+        min_interval: float = 0.25,
+        max_retries: int = 7,
     ):
         self.base_url = (base_url or os.environ.get("CHAINTRACE_ESPLORA_URL") or DEFAULT_ESPLORA_URL).rstrip("/")
         self.source = self.base_url
@@ -123,7 +123,13 @@ class EsploraClient:
                 continue
             if resp.status_code in (400, 404):
                 raise NotFoundError(f"{path}: {resp.text.strip()[:200]}")
-            if resp.status_code == 429 or resp.status_code >= 500:
+            if resp.status_code == 429:
+                # Rate limited: wait as long as the server asks, or back off up to a minute.
+                last_error = ChainDataError(f"{path}: HTTP 429")
+                retry_after = resp.headers.get("Retry-After", "")
+                time.sleep(float(retry_after) if retry_after.isdigit() else min(60.0, 2.0 * 2**attempt))
+                continue
+            if resp.status_code >= 500:
                 last_error = ChainDataError(f"{path}: HTTP {resp.status_code}")
                 time.sleep(0.5 * 2**attempt)
                 continue

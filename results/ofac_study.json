@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-11-19T14:07:21+00:00",
+  "data_source": "https://mempool.space/api",
+  "params": {
+    "max_txs_per_address": 100
+  },
+  "dataset": {
+    "sanctioned_addresses": 532,
+    "sanctioned_entities": 65,
+    "active_addresses": 526,
+    "total_received_btc": 249770.71,
+    "transactions_analyzed": 8825,
+    "spending_transactions": 4248,
+    "histories_truncated": 145,
+    "fetch_errors": 4
+  },
+  "clustering": {
+    "addresses_that_spent": 492,
+    "clusters_with_sanctioned_addresses": 197,
+    "largest_cluster": 30949,
+    "merged_sanctioned_pairs": 748,
+    "same_entity_pairs": 631,
+    "pair_precision_pct": 84.4,
+    "same_entity_pairs_possible": 10536,
+    "same_entity_pairs_recovered": 631,
+    "pair_recall_pct": 6.0,
+    "mixed_entity_clusters": [
+      [
+        "Fengbing XIA",
+        "Hongfei WANG",
+        "Jiantong WANG",
+        "Mingming WANG",
+        "SHPS SHELBIT",
+        "Wei ZHANG",
+        "Xiaojun HUANG",
+        "Xingbiao SHEN"
+      ],
+      [
+        "HEBEI ATUN TRADING CO., LTD.",
+        "Jiadong LI",
+        "SUEX OTC, S.R.O.",
+        "Vitaliy Sergeyevich ANDREYEV",
+        "Yinyin TIAN"
+      ],
+      [
+        "Arman KAHZADIAN",
+        "Behzad MESRI",
+        "CRYPTO HOME DMCC",
+        "Dmytro RASHEVSKYI",
+        "Mingming WANG",
+        "Mojtaba GHAL'EH-KUHI"
+      ],
+      [
+        "SUEX OTC, S.R.O.",
+        "Siavash KAYVANPOUR"
+      ],
+      [
+        "Anton Nikolaeyvich ANDREYEV",
+        "Matthew Simon GRIMM",
+        "SECONDEYE SOLUTION"
+      ],
+      [
+        "Anton Nikolaeyvich ANDREYEV",
+        "SECONDEYE SOLUTION"
+      ],
+      [
+        "Ivan Gennadievich KONDRATIEV",
+        "Rolan SOKOLOVSKI"
+      ],
+      [
+        "SUEX OTC, S.R.O.",
+        "Siavash KAYVANPOUR"
+      ],
+      [
+        "Danil POTEKHIN",
+        "Yunhe WANG"
+      ],
+      [
+        "Artem Mikhaylovich LIFSHITS",
+        "SUEX OTC, S.R.O."
+      ],
+      [
+        "Anton Nikolaeyvich ANDREYEV",
+        "Artem Mikhaylovich LIFSHITS"
+      ],
+      [
+        "Behrouz PARSARAD",
+        "Dmitrii KARASAVIDI",
+        "Fujing ZHENG",
+        "Matthew Simon GRIMM",
+        "SOUTHFRONT"
+      ],
+      [
+        "Jiadong LI",
+        "Yinyin TIAN"
+      ]
+    ]
+  },
+  "leads": {
+    "unlisted_addresses_linked": 127414,
+    "unlisted_addresses_linked_excluding_services": 12539,
+    "service_scale_clusters": 23,
+    "service_cluster_threshold": 1000,
+    "entities_with_new_leads": 52
+  },
+  "behaviour": {
+    "coinjoin_spends": 105,
+    "addresses_spending_into_coinjoin": 30,
+    "pct_of_spenders_using_coinjoin": 6.1
+  }
+}

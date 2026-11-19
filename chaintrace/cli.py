@@ -90,6 +90,29 @@ def _cmd_verify(args) -> int:
     return 2
 
 
+def _cmd_study(args) -> int:
+    from .esplora import EsploraClient
+    from .study import SanctionedSet, run_study
+
+    sanctioned = SanctionedSet.from_file(DEFAULT_DATA_DIR / "labels" / "ofac_sdn.json")
+    client = EsploraClient(base_url=args.api)
+
+    def progress(n: int, total: int, addr: str) -> None:
+        print(f"\r  [{n}/{total}] {addr:<62}", end="", file=sys.stderr, flush=True)
+
+    result = run_study(client, sanctioned, max_txs=args.max_txs, progress=progress)
+    print(file=sys.stderr)
+    private = result.pop("_private")
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    private_path = out.with_name(out.stem + ".private.json")
+    private_path.write_text(json.dumps(private, indent=2), encoding="utf-8")
+    print(json.dumps({k: v for k, v in result.items() if k in ("dataset", "clustering", "leads", "behaviour")}, indent=2))
+    print(f"\nSummary written to {out}; lead addresses written to {private_path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="chaintrace", description="Bitcoin fund-flow tracing and forensics")
     sub = p.add_subparsers(dest="command", required=True)
@@ -118,6 +141,12 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("verify", help="verify a report's evidence hashes")
     v.add_argument("report")
     v.set_defaults(func=_cmd_verify)
+
+    st = sub.add_parser("study", help="measure clustering accuracy against OFAC-sanctioned addresses")
+    st.add_argument("--max-txs", type=int, default=100, help="history fetched per sanctioned address")
+    st.add_argument("--out", default="results/ofac_study.json")
+    st.add_argument("--api", help="Esplora base URL (default https://blockstream.info/api)")
+    st.set_defaults(func=_cmd_study)
 
     args = p.parse_args(argv)
     return args.func(args)
